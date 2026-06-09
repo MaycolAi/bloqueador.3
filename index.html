@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velocrea · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--red:#dc2626;--green:#16a34a;--amber:#d97706;--blue:#2563eb;--bg:#08080c;--bg2:#0f0f16;--bg3:#161620;--bg4:#1c1c28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--txt:#f2ede6;--txt2:#9898aa;--txt3:#525260;--r:12px;--rs:8px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--txt);display:flex;min-height:100vh}
+.sidebar{width:210px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform 0.2s}
+.logo{display:flex;align-items:center;gap:10px;padding:20px 16px 18px;border-bottom:1px solid var(--border)}
+.lm{width:32px;height:32px;background:var(--red);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;flex-shrink:0}
+.lt{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--txt)}
+.nav-g{padding:14px 0 6px}
+.nav-label{font-size:9px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;padding:0 14px 6px}
+.nl{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--txt2);border-left:2px solid transparent;cursor:pointer;transition:all 0.15s;text-decoration:none}
+.nl:hover{background:var(--bg3);color:var(--txt)}
+.nl.active{color:var(--red);border-left-color:var(--red);background:var(--bg3)}
+.nl i{width:16px;text-align:center;font-size:13px}
+.sb-bottom{margin-top:auto;padding:14px;border-top:1px solid var(--border)}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:var(--rs);margin-bottom:10px}
+.ua{width:30px;height:30px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
+.un{font-size:12px;font-weight:600;color:var(--txt);display:block}
+.uf{font-size:10px;color:var(--txt3);display:block}
+.trial-badge{background:rgba(217,119,6,0.12);border:1px solid rgba(217,119,6,0.25);border-radius:var(--rs);padding:8px 12px;font-size:11px;color:var(--amber);text-align:center;margin-bottom:10px}
+.plan-upgrade{width:100%;padding:8px;background:var(--red);border:none;border-radius:var(--rs);color:#fff;font-family:'Instrument Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.plan-upgrade:hover{background:#b91c1c}
+.logout-btn{width:100%;padding:7px;background:transparent;border:1px solid var(--border2);border-radius:var(--rs);color:var(--txt3);font-family:'Instrument Sans',sans-serif;font-size:12px;cursor:pointer;margin-top:6px;transition:all 0.2s}
+.logout-btn:hover{background:var(--bg3);color:var(--txt2)}
+.main{margin-left:210px;flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
+.pt{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--txt)}
+.ps{font-size:11px;color:var(--txt3);margin-top:1px}
+.tr{display:flex;align-items:center;gap:12px}
+.live-b{display:flex;align-items:center;gap:5px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--green);font-weight:500}
+.ld{width:6px;height:6px;background:var(--green);border-radius:50%;animation:lp 2s infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:0.3}}
+.clk{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt3)}
+.content{padding:22px 24px 40px;flex:1}
+.panel{display:none}.panel.active{display:block}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px}
+.ki{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ki.g{background:rgba(22,163,74,0.12);color:var(--green)}.ki.r{background:rgba(220,38,38,0.12);color:var(--red)}.ki.b{background:rgba(37,99,235,0.12);color:var(--blue)}.ki.a{background:rgba(217,119,6,0.12);color:var(--amber)}
+.kl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:4px}
+.kv{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--txt);display:block}.kv.pos{color:var(--green)}.kv.neg{color:var(--red)}
+.kn{font-size:10px;color:var(--txt3);display:block;margin-top:2px}
+.risk-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:16px}
+.rh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.rt{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.rs{font-size:11px;color:var(--txt3);max-width:460px;line-height:1.5}
+.rpct{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700}
+.track{background:var(--bg4);border-radius:5px;height:8px;overflow:hidden;margin-bottom:6px}
+.fill{height:100%;border-radius:5px;transition:width 0.6s ease}
+.fill.safe{background:var(--green)}.fill.warn{background:var(--amber)}.fill.danger{background:var(--red)}
+.rf{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.ctl{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.csl{font-size:11px;color:var(--txt3)}
+.ci{font-size:15px;color:var(--txt3);margin-top:1px}
+.ci.b{color:var(--blue)}.ci.a{color:var(--amber)}
+.ctw{display:flex;align-items:flex-start;gap:10px}
+.sbk{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.sr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:12px}
+.sl{color:var(--txt2)}.sv{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--red)}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--bg4);border-radius:3px;outline:none;cursor:pointer;margin-bottom:4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--red);border-radius:50%;border:2px solid var(--bg2);cursor:pointer}
+.stops{display:flex;justify-content:space-between;font-size:9px;color:var(--txt3)}
+.stat-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.si{background:var(--bg3);border-radius:var(--rs);padding:10px 11px}
+.sil{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:3px}
+.siv{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--txt);display:block}
+.siv.r{color:var(--red)}.siv.a{color:var(--amber)}
+.acts{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(--rs);border:none;font-family:'Instrument Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.bd{background:rgba(220,38,38,0.12);color:var(--red);border:1px solid rgba(220,38,38,0.2)}.bd:hover{background:rgba(220,38,38,0.2)}
+.bg{background:transparent;color:var(--txt2);border:1px solid var(--border2)}.bg:hover{background:var(--bg3);color:var(--txt)}
+.bp{background:var(--red);color:#fff}.bp:hover{background:#b91c1c}
+.fw{width:100%;justify-content:center}
+.il{display:flex;flex-direction:column;gap:0}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.ir:last-child{border-bottom:none}
+.ik{color:var(--txt2);display:flex;align-items:center;gap:6px}.ik i{width:13px;text-align:center;color:var(--txt3);font-size:11px}
+.iv{font-weight:600;color:var(--txt)}.iv.g{color:var(--green)}.iv.r{color:var(--red)}
+.sb-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.sb-badge.g{background:rgba(22,163,74,0.1);color:var(--green);border:1px solid rgba(22,163,74,0.2)}
+.blocked-bar{display:none;align-items:center;gap:12px;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.2);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
+.blocked-bar.show{display:flex}
+.bb-icon{font-size:18px;color:var(--red)}
+.bb-title{font-size:13px;font-weight:700;color:var(--red);display:block;margin-bottom:2px}
+.bb-sub{font-size:11px;color:var(--txt3)}
+.banner{position:relative;border-radius:var(--r);overflow:hidden;height:160px;margin-top:6px}
+.banner img{width:100%;height:100%;object-fit:cover;display:block}
+.bov{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.4) 100%)}
+.bct{position:absolute;inset:0;padding:22px 26px;display:flex;flex-direction:column;justify-content:center}
+.bq{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;letter-spacing:1px}
+.bq2{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--red);letter-spacing:1px}
+.hkpi{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.hk{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px}
+.hkl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px}
+.hkv{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--txt)}.hkv.g{color:var(--green)}.hkv.r{color:var(--red)}
+.bc-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.bc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.bc-title{font-size:13px;font-weight:700;color:var(--txt)}
+.bc-sub{font-size:11px;color:var(--txt3)}
+.leg-row{display:flex;gap:12px}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--txt2)}
+.leg-d{width:8px;height:8px;border-radius:2px}.leg.g .leg-d{background:var(--green)}.leg.r .leg-d{background:var(--red)}
+.bc{display:flex;align-items:flex-end;gap:4px;height:100px;padding-bottom:22px;position:relative}
+.bc::after{content:'';position:absolute;bottom:22px;left:0;right:0;height:1px;background:var(--border)}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%}
+.br{width:100%;border-radius:3px 3px 0 0;min-height:2px}.br.g{background:var(--green)}.br.r{background:var(--red)}
+.bl{font-size:9px;color:var(--txt3);font-family:'JetBrains Mono',monospace}
+.tt{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.thead{display:grid;grid-template-columns:70px 1fr 60px 80px 85px 70px;gap:8px;padding:8px 14px;background:var(--bg3);font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.7px}
+.trow{display:grid;grid-template-columns:70px 1fr 60px 80px 85px 70px;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;align-items:center}
+.trow:last-child{border-bottom:none}
+.tdate{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3)}
+.tpair{font-weight:700;color:var(--txt)}
+.tdir{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;display:inline-block;text-align:center}
+.tdir.buy{background:rgba(22,163,74,0.12);color:var(--green)}.tdir.sell{background:rgba(220,38,38,0.12);color:var(--red)}
+.tpnl{font-family:'JetBrains Mono',monospace;font-weight:700}.tpnl.pos{color:var(--green)}.tpnl.neg{color:var(--red)}
+.tbadge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;display:inline-block}
+.tbadge.win{background:rgba(22,163,74,0.1);color:var(--green)}.tbadge.loss{background:rgba(220,38,38,0.1);color:var(--red)}
+.plan-hero{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;background-image:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%)}
+.ph-left .ph-tag{font-size:10px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:6px}
+.ph-left h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--txt);margin-bottom:4px}
+.ph-left p{font-size:12px;color:var(--txt3)}
+.ph-right{display:flex;gap:10px}
+.plan-g{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.pc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.pc.ag{border-top:3px solid var(--green)}.pc.ar{border-top:3px solid var(--red)}.pc.ab{border-top:3px solid var(--blue)}.pc.aa{border-top:3px solid var(--amber)}
+.pci{width:34px;height:34px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:12px}
+.pci.g{background:rgba(22,163,74,0.12);color:var(--green)}.pci.r{background:rgba(220,38,38,0.12);color:var(--red)}.pci.b{background:rgba(37,99,235,0.12);color:var(--blue)}.pci.a{background:rgba(217,119,6,0.12);color:var(--amber)}
+.pct{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:12px}
+.pr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--txt2)}
+.pr:last-child{border-bottom:none}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--txt)}
+.mono.g{color:var(--green)}.mono.r{color:var(--red)}.mono.a{color:var(--amber)}
+.cl-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.cl-title{font-size:13px;font-weight:700;color:var(--txt);display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.cl-title i{color:var(--amber)}
+.cl-list{display:flex;flex-direction:column;gap:10px}
+.ci-row{display:flex;align-items:center;gap:10px;cursor:pointer}
+.ci-row input{width:15px;height:15px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
+.ci-row span{font-size:12px;color:var(--txt2);line-height:1.4}
+.conn-steps{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.step-i{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start}
+.step-i:last-child{border-bottom:none}
+.sn{width:32px;height:32px;background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--red)}
+.st{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.sd{font-size:12px;color:var(--txt2);line-height:1.5}
+.sd a{color:var(--red);text-decoration:none}
+.fg{margin-bottom:12px}
+.fl{font-size:10px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--rs);padding:9px 12px;color:var(--txt);font-size:13px;font-family:'Instrument Sans',sans-serif;outline:none;transition:border-color 0.2s}
+.fi:focus{border-color:var(--red)}.fi::placeholder{color:var(--txt3)}
+.iw{position:relative}
+.eb{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--txt3);cursor:pointer;font-size:13px;padding:4px}
+.eb:hover{color:var(--txt)}
+.sec-note{font-size:11px;color:var(--txt3);margin-top:12px;display:flex;align-items:center;gap:6px}
+.sec-note i{color:var(--green)}
+.tgl-list{display:flex;flex-direction:column;gap:0}
+.tgl-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.tgl-row:last-child{border-bottom:none}
+.tgl-n{font-size:12px;font-weight:500;color:var(--txt);display:block;margin-bottom:2px}
+.tgl-d{font-size:11px;color:var(--txt3);display:block}
+.switch{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.sw{position:absolute;cursor:pointer;inset:0;background:var(--bg4);border-radius:20px;transition:0.3s}
+.sw::before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:var(--txt3);border-radius:50%;transition:0.3s}
+.switch input:checked + .sw{background:var(--green)}.switch input:checked + .sw::before{transform:translateX(18px);background:#fff}
+.rl{display:flex;flex-direction:column;gap:0}
+.rrow{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.rrow:last-child{border-bottom:none}
+.rrow i{color:var(--green);font-size:14px;flex-shrink:0;margin-top:1px}
+.rn{font-size:12px;font-weight:500;color:var(--txt);display:block;margin-bottom:2px}
+.rd{font-size:11px;color:var(--txt3);display:block}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.kpi-row{grid-template-columns:1fr 1fr}.two-col,.plan-g{grid-template-columns:1fr}.hkpi{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOCKSCREEN -->
+<div id="lockscreen" style="display:none;position:fixed;inset:0;z-index:9999;background:#000;align-items:center;justify-content:center;flex-direction:column;text-align:center">
+  <canvas id="lc" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
+  <div style="position:relative;z-index:2;padding:40px;max-width:480px">
+    <div style="width:80px;height:80px;border-radius:50%;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:#dc2626;animation:pl 2s infinite">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:#fff;letter-spacing:4px;margin-bottom:6px">CUENTA BLOQUEADA</div>
+    <div style="font-size:13px;color:#888;margin-bottom:28px">Límite de pérdida diaria alcanzado</div>
+    <div style="font-size:10px;letter-spacing:2px;color:#555;text-transform:uppercase;margin-bottom:8px">Tiempo restante</div>
+    <div id="lcd" style="font-family:'JetBrains Mono',monospace;font-size:50px;font-weight:700;color:#dc2626;margin-bottom:24px;letter-spacing:4px">05:00:00</div>
+    <div style="font-size:15px;color:#ccc;font-style:italic;line-height:1.7;margin-bottom:20px">"Pierde el que se rinde,<br>no el que sigue intentando."</div>
+    <div style="font-size:11px;color:#555;border:1px solid #222;border-radius:8px;padding:10px 16px;display:inline-block"><i class="fa-solid fa-lock" style="color:#dc2626;margin-right:6px"></i>Activo en todos tus dispositivos · No manipulable</div>
+  </div>
+</div>
+<style>@keyframes pl{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.3)}50%{box-shadow:0 0 0 16px rgba(220,38,38,0)}}</style>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="lm"><i class="fa-solid fa-shield-halved"></i></div>
+    <span class="lt">Velocrea</span>
+  </div>
+  <div class="nav-g">
+    <div class="nav-label">Principal</div>
+    <a class="nl active" onclick="sp('dashboard',this)"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <a class="nl" onclick="sp('historial',this)"><i class="fa-solid fa-chart-column"></i><span>Historial</span></a>
+    <a class="nl" onclick="sp('plan',this)"><i class="fa-solid fa-book-open"></i><span>Plan de Trading</span></a>
+  </div>
+  <div class="nav-g">
+    <div class="nav-label">Cuenta</div>
+    <a class="nl" onclick="sp('conexion',this)"><i class="fa-solid fa-plug"></i><span>Conexión MT5</span></a>
+    <a class="nl" onclick="sp('alertas',this)"><i class="fa-solid fa-bell"></i><span>Alertas</span></a>
+    <a class="nl" onclick="sp('suscripcion',this)"><i class="fa-solid fa-credit-card"></i><span>Suscripción</span></a>
+  </div>
+  <div class="sb-bottom">
+    <div class="user-pill">
+      <div class="ua" id="u-av">M</div>
+      <div><span class="un" id="u-name">Maycol</span><span class="uf" id="u-firm">FundingPips · Starter</span></div>
+    </div>
+    <div class="trial-badge" id="trial-info">⏱ Trial: 7 días restantes</div>
+    <button class="plan-upgrade" onclick="sp('suscripcion',null)"><i class="fa-solid fa-rocket"></i> Activar plan</button>
+    <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</button>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="topbar">
+    <div><div class="pt" id="page-title">Dashboard</div><div class="ps" id="page-sub">Protección activa · NYSE Open Session</div></div>
+    <div class="tr">
+      <div class="live-b"><div class="ld"></div>En vivo</div>
+      <div class="clk" id="clk">--:--:--</div>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="p-dashboard">
+      <div class="kpi-row">
+        <div class="kc"><div class="ki g"><i class="fa-solid fa-wallet"></i></div><div><span class="kl">Balance</span><span class="kv">$5,000</span><span class="kn">Fondeado</span></div></div>
+        <div class="kc"><div class="ki b"><i class="fa-solid fa-arrow-trend-up"></i></div><div><span class="kl">Equity</span><span class="kv pos" id="k-eq">$4,970</span><span class="kn">Tiempo real</span></div></div>
+        <div class="kc"><div class="ki r"><i class="fa-solid fa-calendar-day"></i></div><div><span class="kl">P&L hoy</span><span class="kv neg" id="k-pnl">-$30</span><span class="kn" id="k-pct">-0.60%</span></div></div>
+        <div class="kc"><div class="ki a"><i class="fa-solid fa-crosshairs"></i></div><div><span class="kl">Límite diario</span><span class="kv neg" id="k-lim">$50</span><span class="kn" id="k-lpct">1.0% conf.</span></div></div>
+      </div>
+      <div class="risk-card">
+        <div class="rh"><div><div class="rt">Riesgo diario consumido</div><div class="rs">Bloqueo automático de 5 horas al 100% — activo en todos los dispositivos sin posibilidad de manipulación</div></div><div class="rpct" id="rpct" style="color:var(--amber)">60%</div></div>
+        <div class="track"><div class="fill warn" id="rfill" style="width:60%"></div></div>
+        <div class="rf"><span id="r-used">$30 usados de $50 límite</span><span id="r-rest">$20 restantes</span></div>
+      </div>
+      <div class="blocked-bar" id="blk-bar">
+        <i class="fa-solid fa-lock bb-icon"></i>
+        <div><span class="bb-title">Cuenta bloqueada · Límite alcanzado</span><span class="bb-sub">Posiciones cerradas. Bloqueado por 5 horas en todos los dispositivos.</span></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-sliders ci" style="margin-top:2px"></i><div><div class="ctl">Ajustar límite de pérdida</div><div class="csl">Configura tu máximo diario</div></div></div></div>
+          <div class="sbk">
+            <div class="sr"><span class="sl">Porcentaje máximo</span><span class="sv" id="sl-v">1.0%</span></div>
+            <input type="range" min="0.5" max="3" step="0.5" value="1" id="lim-sl">
+            <div class="stops"><span>0.5%</span><span>1%</span><span>1.5%</span><span>2%</span><span>2.5%</span><span>3%</span></div>
+          </div>
+          <div class="stat-g">
+            <div class="si"><span class="sil">En USD</span><span class="siv r" id="sl-usd">$50</span></div>
+            <div class="si"><span class="sil">Restante</span><span class="siv" id="sl-rest">$20</span></div>
+            <div class="si"><span class="sil">Bloqueo</span><span class="siv a">5 hrs</span></div>
+          </div>
+          <div class="acts">
+            <button class="btn bd" onclick="triggerBlock()"><i class="fa-solid fa-lock"></i> Simular bloqueo</button>
+            <button class="btn bg" onclick="resetDemo()"><i class="fa-solid fa-rotate-left"></i> Resetear</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-circle-info ci b" style="margin-top:2px"></i><div><div class="ctl">Estado de cuenta</div><div class="csl">FundingPips · MT5</div></div></div><div class="sb-badge g">Activa</div></div>
+          <div class="il">
+            <div class="ir"><span class="ik"><i class="fa-solid fa-building-columns"></i>Firma</span><span class="iv">FundingPips</span></div>
+            <div class="ir"><span class="ik"><i class="fa-solid fa-coins"></i>Tamaño</span><span class="iv">$5,000</span></div>
+            <div class="ir"><span class="ik"><i class="fa-solid fa-clock"></i>Sesión</span><span class="iv">NYSE Open</span></div>
+            <div class="ir"><span class="ik"><i class="fa-solid fa-hourglass-half"></i>Ventana</span><span class="iv">9:00–10:30 ET</span></div>
+            <div class="ir"><span class="ik"><i class="fa-solid fa-shield"></i>Bloqueo</span><span class="iv g">5 hrs · Auto</span></div>
+            <div class="ir"><span class="ik"><i class="fa-solid fa-mobile-screen"></i>Multi-dispositivo</span><span class="iv g">Protegido</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="banner">
+        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80" alt="Trading">
+        <div class="bov"></div>
+        <div class="bct"><div class="bq">"Pierde el que se rinde</div><div class="bq2">no el que sigue intentando."</div></div>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="panel" id="p-historial">
+      <div class="hkpi">
+        <div class="hk"><div class="hkl">Días ganadores</div><div class="hkv g">8</div></div>
+        <div class="hk"><div class="hkl">Días perdedores</div><div class="hkv r">4</div></div>
+        <div class="hk"><div class="hkl">Win rate</div><div class="hkv">67%</div></div>
+        <div class="hk"><div class="hkl">P&L total</div><div class="hkv g">+$312</div></div>
+      </div>
+      <div class="bc-wrap">
+        <div class="bc-head"><div><div class="bc-title">P&L diario</div><div class="bc-sub">Últimas 12 sesiones NYSE</div></div><div class="leg-row"><span class="leg g"><span class="leg-d"></span>Ganancia</span><span class="leg r"><span class="leg-d"></span>Pérdida</span></div></div>
+        <div class="bc" id="bc"></div>
+      </div>
+      <div class="tt">
+        <div class="thead"><span>Fecha</span><span>Par</span><span>Dir.</span><span>P&L</span><span>% Balance</span><span>Estado</span></div>
+        <div id="tbody"></div>
+      </div>
+    </div>
+
+    <!-- PLAN -->
+    <div class="panel" id="p-plan">
+      <div class="plan-hero">
+        <div class="ph-left"><div class="ph-tag">Sistema Velocrea</div><h2>Plan de Trading ICT / SMC</h2><p>NYSE Open Session · FundingPips</p></div>
+        <div class="ph-right"><button class="btn bg" onclick="resetChecklist()"><i class="fa-solid fa-rotate-left"></i> Limpiar checklist</button></div>
+      </div>
+      <div class="plan-g">
+        <div class="pc ag"><div class="pci g"><i class="fa-solid fa-clock"></i></div><div class="pct">Sesión de Trading</div>
+          <div class="pr"><span>Preparación</span><span class="mono">9:00 AM ET</span></div>
+          <div class="pr"><span>Entrada habilitada</span><span class="mono g">9:30 AM ET</span></div>
+          <div class="pr"><span>Cierre posiciones</span><span class="mono r">11:00 AM ET</span></div>
+          <div class="pr"><span>Ventana total</span><span class="mono">1.5 horas</span></div>
+          <div class="pr"><span>Fuera de ventana</span><span class="mono a">Sin operar</span></div>
+        </div>
+        <div class="pc ar"><div class="pci r"><i class="fa-solid fa-shield-halved"></i></div><div class="pct">Gestión de Riesgo</div>
+          <div class="pr"><span>Riesgo por operación</span><span class="mono">0–0.5%</span></div>
+          <div class="pr"><span>Pérdida máxima diaria</span><span class="mono r">1.0%</span></div>
+          <div class="pr"><span>Bloqueo automático</span><span class="mono r">5 horas</span></div>
+          <div class="pr"><span>3 pérdidas seguidas</span><span class="mono a">Stop día</span></div>
+          <div class="pr"><span>3 días rojos</span><span class="mono a">Descanso</span></div>
+        </div>
+        <div class="pc ab"><div class="pci b"><i class="fa-solid fa-magnifying-glass-chart"></i></div><div class="pct">Criterios ICT / SMC</div>
+          <div class="pr"><span>Reacción en POI / OB</span><span class="mono g">Requerido</span></div>
+          <div class="pr"><span>Barrido de liquidez</span><span class="mono g">Requerido</span></div>
+          <div class="pr"><span>FVG confirmado</span><span class="mono g">Requerido</span></div>
+          <div class="pr"><span>CHoCH o BOS</span><span class="mono g">Requerido</span></div>
+          <div class="pr"><span>Sin confluencia</span><span class="mono r">Sin trade</span></div>
+        </div>
+        <div class="pc aa"><div class="pci a"><i class="fa-solid fa-brain"></i></div><div class="pct">Reglas Psicológicas</div>
+          <div class="pr"><span>Operar sin emociones</span><span class="mono g">Siempre</span></div>
+          <div class="pr"><span>No vengar pérdidas</span><span class="mono r">Prohibido</span></div>
+          <div class="pr"><span>No aumentar lote</span><span class="mono r">Prohibido</span></div>
+          <div class="pr"><span>Respetar el plan</span><span class="mono g">Siempre</span></div>
+          <div class="pr"><span>Diario de operaciones</span><span class="mono a">Obligatorio</span></div>
+        </div>
+      </div>
+      <div class="cl-box">
+        <div class="cl-title"><i class="fa-solid fa-flag-checkered"></i> Checklist pre-trade</div>
+        <div class="cl-list">
+          <label class="ci-row"><input type="checkbox"><span>¿Estoy dentro de la ventana horaria? (9:00–11:00 AM ET)</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Revisé mi P&L y tengo margen disponible hoy?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Identifiqué el POI / Order Block en HTF?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Hubo barrido de liquidez confirmado?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Veo FVG + CHoCH o BOS en LTF?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿El riesgo es máximo 0.5% del balance?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Llevo menos de 3 pérdidas consecutivas hoy?</span></label>
+          <label class="ci-row"><input type="checkbox"><span>¿Mi estado mental es neutro, sin estrés ni euforia?</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONEXION -->
+    <div class="panel" id="p-conexion">
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-list-ol ci" style="margin-top:2px"></i><div><div class="ctl">Pasos de conexión</div><div class="csl">Sigue el orden exacto</div></div></div></div>
+          <div class="conn-steps">
+            <div class="step-i"><div class="sn">01</div><div><div class="st">Compra tu cuenta FundingPips</div><div class="sd">Ve a <a href="https://fundingpips.com" target="_blank">fundingpips.com</a>, elige $5,000 y pasa el challenge. Recibirás Login, Password y Servidor MT5.</div></div></div>
+            <div class="step-i"><div class="sn">02</div><div><div class="st">Crea cuenta en MetaApi</div><div class="sd">Regístrate gratis en <a href="https://metaapi.cloud" target="_blank">metaapi.cloud</a>. Es el puente entre MT5 y Velocrea.</div></div></div>
+            <div class="step-i"><div class="sn">03</div><div><div class="st">Conecta tu MT5 en MetaApi</div><div class="sd">Agrega tu cuenta con Login, Password y Servidor de FundingPips. Obtendrás un Account ID y Token.</div></div></div>
+            <div class="step-i"><div class="sn">04</div><div><div class="st">Activa la protección</div><div class="sd">Pega tu Token y Account ID a la derecha. El sistema empieza a monitorear en tiempo real.</div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-key ci a" style="margin-top:2px"></i><div><div class="ctl">Credenciales MT5</div><div class="csl">Seguro y encriptado</div></div></div></div>
+          <div class="fg"><label class="fl">MetaApi Token</label><div class="iw"><input type="password" class="fi" id="api-token" placeholder="Pega tu token aquí..."><button class="eb" onclick="tp('api-token')"><i class="fa-solid fa-eye"></i></button></div></div>
+          <div class="fg"><label class="fl">Account ID</label><input type="text" class="fi" placeholder="ej. abc123def456..."></div>
+          <div class="fg"><label class="fl">Servidor MT5</label><input type="text" class="fi" placeholder="ej. FundingPips-Live"></div>
+          <div class="fg"><label class="fl">Límite de pérdida</label><select class="fi"><option value="1">1.0% — $50 en $5K</option><option value="1.5">1.5% — $75 en $5K</option><option value="0.5">0.5% — $25 en $5K</option></select></div>
+          <button class="btn bp fw"><i class="fa-solid fa-plug"></i> Conectar mi cuenta</button>
+          <div class="sec-note"><i class="fa-solid fa-lock"></i> Credenciales almacenadas localmente. Nunca compartidas.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div class="panel" id="p-alertas">
+      <div class="two-col">
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-bell ci a" style="margin-top:2px"></i><div><div class="ctl">Notificaciones</div><div class="csl">Canales de alerta activos</div></div></div></div>
+          <div class="tgl-list">
+            <div class="tgl-row"><div><span class="tgl-n">Alerta al 50% del límite</span><span class="tgl-d">Aviso temprano</span></div><label class="switch"><input type="checkbox" checked><span class="sw"></span></label></div>
+            <div class="tgl-row"><div><span class="tgl-n">Alerta al 75% del límite</span><span class="tgl-d">Zona de peligro</span></div><label class="switch"><input type="checkbox" checked><span class="sw"></span></label></div>
+            <div class="tgl-row"><div><span class="tgl-n">Push MT5 al bloquear</span><span class="tgl-d">Celular y PC</span></div><label class="switch"><input type="checkbox" checked><span class="sw"></span></label></div>
+            <div class="tgl-row"><div><span class="tgl-n">Resumen diario por email</span><span class="tgl-d">Al cierre de sesión NYSE</span></div><label class="switch"><input type="checkbox"><span class="sw"></span></label></div>
+            <div class="tgl-row"><div><span class="tgl-n">3 pérdidas seguidas</span><span class="tgl-d">Para el día automáticamente</span></div><label class="switch"><input type="checkbox" checked><span class="sw"></span></label></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><div class="ctw"><i class="fa-solid fa-gears ci" style="margin-top:2px"></i><div><div class="ctl">Reglas Velocrea</div><div class="csl">Protección multicapa</div></div></div></div>
+          <div class="rl">
+            <div class="rrow"><i class="fa-solid fa-circle-check"></i><div><span class="rn">Bloqueo al 1% pérdida diaria</span><span class="rd">5 horas · No manipulable desde ningún dispositivo</span></div></div>
+            <div class="rrow"><i class="fa-solid fa-circle-check"></i><div><span class="rn">Stop tras 3 pérdidas seguidas</span><span class="rd">Cierre automático de la sesión</span></div></div>
+            <div class="rrow"><i class="fa-solid fa-circle-check"></i><div><span class="rn">Descanso tras 3 días rojos</span><span class="rd">Recuperación mental obligatoria</span></div></div>
+            <div class="rrow"><i class="fa-solid fa-circle-check"></i><div><span class="rn">Ventana 9:00–10:30 AM ET</span><span class="rd">Sin operar fuera de la ventana</span></div></div>
+            <div class="rrow"><i class="fa-solid fa-circle-check"></i><div><span class="rn">Bloqueo multi-dispositivo</span><span class="rd">Laptop, celular, tablet — todos bloqueados</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUSCRIPCION -->
+    <div class="panel" id="p-suscripcion">
+      <div class="card" style="max-width:680px;margin:0 auto">
+        <div class="ch"><div class="ctw"><i class="fa-solid fa-credit-card ci a" style="margin-top:2px"></i><div><div class="ctl">Mi suscripción</div><div class="csl">Gestiona tu plan Velocrea</div></div></div></div>
+        <div style="background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.2);border-radius:10px;padding:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:3px">⏱ Período de prueba activo</div><div style="font-size:12px;color:var(--txt3)" id="trial-days">7 días restantes de tu trial gratuito</div></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--amber)" id="trial-cnt">7</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+          <div style="border:1px solid var(--border2);border-radius:10px;padding:22px">
+            <div style="font-size:10px;letter-spacing:2px;color:var(--txt3);text-transform:uppercase;margin-bottom:8px">Starter</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--txt);letter-spacing:1px;margin-bottom:4px">$5.99<span style="font-size:16px;color:var(--txt3)">/mes</span></div>
+            <div style="font-size:12px;color:var(--txt3);margin-bottom:16px">Cuentas $1K – $50K</div>
+            <button class="btn bp fw" onclick="handlePayment('starter')"><i class="fa-solid fa-lock"></i> Suscribirse · $5.99/mes</button>
+          </div>
+          <div style="border:2px solid var(--red);border-radius:10px;padding:22px;position:relative">
+            <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap">Más popular</div>
+            <div style="font-size:10px;letter-spacing:2px;color:var(--txt3);text-transform:uppercase;margin-bottom:8px">Pro</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--txt);letter-spacing:1px;margin-bottom:4px">$12.99<span style="font-size:16px;color:var(--txt3)">/mes</span></div>
+            <div style="font-size:12px;color:var(--txt3);margin-bottom:16px">Cuentas $50K – $200K</div>
+            <button class="btn bp fw" onclick="handlePayment('pro')"><i class="fa-solid fa-lock"></i> Suscribirse · $12.99/mes</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--txt3);text-align:center;display:flex;align-items:center;justify-content:center;gap:8px"><i class="fa-solid fa-shield-check" style="color:var(--green)"></i>Garantía de 30 días · Cancela cuando quieras · Sin contratos</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const BAL=5000;let loss=30,isBlocked=false,blockEnd=null,li=null;
+function updateAll(){
+  const pct=parseFloat(document.getElementById('lim-sl').value);
+  const lim=Math.round(BAL*pct/100);
+  const used=Math.min((loss/lim)*100,100);
+  const ur=Math.round(used);
+  const rest=Math.max(lim-loss,0);
+  T('sl-v',pct.toFixed(1)+'%');T('sl-usd','$'+lim);T('sl-rest','$'+Math.round(rest));
+  T('k-lim','$'+lim);T('k-lpct',pct.toFixed(1)+'% conf.');T('k-pnl','-$'+Math.round(loss));T('k-pct','-'+(loss/BAL*100).toFixed(2)+'%');T('k-eq','$'+(BAL-loss).toLocaleString());
+  T('r-used','$'+Math.round(loss)+' usados de $'+lim+' límite');T('r-rest','$'+Math.round(rest)+' restantes');
+  const f=document.getElementById('rfill');const p=document.getElementById('rpct');
+  if(f){f.style.width=ur+'%';f.className='fill '+(used<40?'safe':used<75?'warn':'danger')}
+  if(p){p.textContent=ur+'%';p.style.color=used<40?'var(--green)':used<75?'var(--amber)':'var(--red)'}
+  if(used>=100&&!isBlocked){isBlocked=true;blockEnd=Date.now()+5*3600000;localStorage.setItem('vblk',blockEnd);document.getElementById('blk-bar').classList.add('show');showLock()}
+}
+document.getElementById('lim-sl').addEventListener('input',updateAll);
+function triggerBlock(){if(isBlocked)return;const lim=Math.round(BAL*parseFloat(document.getElementById('lim-sl').value)/100);loss=lim;updateAll()}
+function resetDemo(){isBlocked=false;blockEnd=null;loss=30;localStorage.removeItem('vblk');if(li)clearInterval(li);hideLock();document.getElementById('blk-bar').classList.remove('show');updateAll()}
+function showLock(){const ls=document.getElementById('lockscreen');ls.style.display='flex';initPart();startCd()}
+function hideLock(){document.getElementById('lockscreen').style.display='none';if(li)clearInterval(li)}
+function startCd(){if(li)clearInterval(li);const tick=()=>{const r=blockEnd-Date.now();if(r<=0){clearInterval(li);isBlocked=false;localStorage.removeItem('vblk');hideLock();loss=0;updateAll();return}const h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000),s=Math.floor((r%60000)/1000);T('lcd',[h,m,s].map(x=>String(x).padStart(2,'0')).join(':'))};tick();li=setInterval(tick,1000)}
+function initPart(){const c=document.getElementById('lc');if(!c)return;const ctx=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;const pts=Array.from({length:55},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:Math.random()*2+.4,a:Math.random()*.4+.1}));const draw=()=>{if(document.getElementById('lockscreen').style.display==='none')return;ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(220,38,38,${p.a})`;ctx.fill()});requestAnimationFrame(draw)};draw()}
+// Check stored block
+const stored=localStorage.getItem('vblk');if(stored&&parseInt(stored)>Date.now()){isBlocked=true;blockEnd=parseInt(stored);showLock()}
+// Clock
+setInterval(()=>{const n=new Date();T('clk',[n.getHours(),n.getMinutes(),n.getSeconds()].map(x=>String(x).padStart(2,'0')).join(':'))},1000);
+// Panel nav
+const titles={dashboard:['Dashboard','Protección activa · NYSE Open Session'],historial:['Historial','Rendimiento por sesión'],plan:['Plan de Trading','Sistema Velocrea · ICT / Smart Money'],conexion:['Conexión MT5','FundingPips + MetaApi'],alertas:['Alertas','Notificaciones y reglas'],suscripcion:['Suscripción','Gestiona tu plan Velocrea']};
+function sp(n,el){document.querySelectorAll('.nl').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.getElementById('p-'+n).classList.add('active');const t=titles[n];if(t){T('page-title',t[0]);T('page-sub',t[1])}}
+// Charts
+const days=[{d:'28M',v:42},{d:'29M',v:-38},{d:'30M',v:65},{d:'2J',v:-72},{d:'3J',v:88},{d:'4J',v:30},{d:'5J',v:-50},{d:'6J',v:55},{d:'9J',v:-25},{d:'10J',v:110},{d:'11J',v:48},{d:'12J',v:-60}];
+const mx=Math.max(...days.map(d=>Math.abs(d.v)));const bc=document.getElementById('bc');
+if(bc)bc.innerHTML=days.map(d=>{const h=Math.round((Math.abs(d.v)/mx)*76);return`<div class="bw"><div class="br ${d.v>=0?'g':'r'}" style="height:${h}px"></div><div class="bl">${d.d}</div></div>`}).join('');
+const trades=[{date:'Hoy',pair:'NAS100',dir:'SELL',pnl:-50,pct:-1.00},{date:'Ayer',pair:'EURUSD',dir:'BUY',pnl:88,pct:1.76},{date:'Ayer',pair:'NAS100',dir:'SELL',pnl:-22,pct:-0.44},{date:'3 Jun',pair:'GBP/USD',dir:'BUY',pnl:65,pct:1.30},{date:'2 Jun',pair:'NAS100',dir:'SELL',pnl:-72,pct:-1.44},{date:'30 May',pair:'NAS100',dir:'BUY',pnl:42,pct:0.84}];
+const tb=document.getElementById('tbody');
+if(tb)tb.innerHTML=trades.map(t=>{const g=t.pnl>=0;return`<div class="trow"><span class="tdate">${t.date}</span><span class="tpair">${t.pair}</span><span class="tdir ${t.dir==='BUY'?'buy':'sell'}">${t.dir}</span><span class="tpnl ${g?'pos':'neg'}">${g?'+':''}$${Math.abs(t.pnl)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt2)">${g?'+':''}${t.pct.toFixed(2)}%</span><span class="tbadge ${g?'win':'loss'}">${g?'WIN':'LOSS'}</span></div>`}).join('');
+// User info
+const u=JSON.parse(localStorage.getItem('velocrea_user')||'{}');
+if(u.name){const av=u.name.charAt(0).toUpperCase();T('u-av',av);T('u-name',u.name)}
+if(u.firm)T('u-firm',u.firm+' · '+(u.plan==='pro'?'Pro':'Starter'));
+if(u.trialEnd){const d=Math.max(0,Math.ceil((u.trialEnd-Date.now())/(86400000)));T('trial-cnt',d);T('trial-days',d+' días restantes de tu trial gratuito')}
+function resetChecklist(){document.querySelectorAll('.ci-row input').forEach(x=>x.checked=false)}
+function tp(id){const e=document.getElementById(id);if(e)e.type=e.type==='password'?'text':'password'}
+function handlePayment(plan){alert('En producción esto abre Stripe. Plan: '+(plan==='pro'?'Pro $12.99/mes':'Starter $5.99/mes'))}
+function logout(){localStorage.removeItem('velocrea_user');window.location.href='../index.html'}
+function T(id,t){const e=document.getElementById(id);if(e)e.textContent=t}
+updateAll();
+</script>
+</body>
+</html>
