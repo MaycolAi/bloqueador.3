@@ -490,7 +490,7 @@ if(u.trialEnd){const d=Math.max(0,Math.ceil((u.trialEnd-Date.now())/(86400000)))
 function resetChecklist(){document.querySelectorAll('.ci-row input').forEach(x=>x.checked=false)}
 function tp(id){const e=document.getElementById(id);if(e)e.type=e.type==='password'?'text':'password'}
 function handlePayment(plan){alert('En producción esto abre Stripe. Plan: '+(plan==='pro'?'Pro $12.99/mes':'Starter $5.99/mes'))}
-function logout(){localStorage.removeItem('velocrea_user');window.location.href='../index.html'}
+function logout(){localStorage.removeItem('velocrea_user');window.location.href='/';}
 function T(id,t){const e=document.getElementById(id);if(e)e.textContent=t}
 updateAll();
 </script>
